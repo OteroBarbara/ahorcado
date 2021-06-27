@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Partida de Ahorcado en curso</title>
+    <script src="js/script.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body onload="cargarPlayer2()">
+    <header>
+        <h1>Ahorcado - Jugador 2</h1>
+    </header>
+    <main>
+        <p>Ingresa una letra:</p>
+        <div>
+            <label for="letra">Letra:</label>
+            <input id="letra" name="letra" type="text" maxlength="1" placeholder="Escribe una letra" required>
+            <input id="probarLetra" type="submit" value="Enviar" onclick="probarLetra()">
+        </div>
+        <p>Palabra a adivinar:</p>
+        <p id="palabraOculta"></p>
+        <p>Intentos restantes: <span id="intentos"></span></p>
+        <p>Historial de letras:</p>
+        <p id="historial"></p>
+    </main>
+    <footer>
+        <p>Grupo 2</p>
+    </footer>
+</body>
+</html>
