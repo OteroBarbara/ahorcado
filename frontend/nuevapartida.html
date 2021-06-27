@@ -17,28 +17,6 @@
             <button onclick="cargarPalabra()">Enviar</button>
         </div>
         <p id="compartir-link"></p>
-        <div id="consultaEstado"></div>
-        <script>
-            function pedirEstado (){
-                console.log(idgame);
-                fetch (`/ahorcado/consultaEstado?idPartida=${idgame}`)
-                .then(res => res.json())
-                .then (data => {
-                    if(data != undefined){
-                        if (data.estado == true){
-                            console.log("El otro jugador ha adivinado la palabra y ganado el juego.")
-                            throw Error;
-                        }else if (data.estado == false){
-                            console.log("El otro jugador ha agotado sus intentos y perdido el juego.")
-                            throw Error;
-                        }
-                    }else{
-                        setTimeout(pedirEstado,1500)
-                    }
-                })
-                .catch(err => alert("Fin del juego, envía una nueva palabra para volver a jugar"));  
-            }
-        </script>
     </main>
     <footer>
         <p>Grupo 2</p>

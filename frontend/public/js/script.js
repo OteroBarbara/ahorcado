@@ -1,5 +1,4 @@
 let historial = "";
-var idgame;
 
 function cargarPalabra(){
     let palabra = document.getElementById('palabra').value.toUpperCase(); 
@@ -17,8 +16,6 @@ function cargarPalabra(){
         .then(data => {
             console.log(data.idpartida);
             document.getElementById('compartir-link').innerHTML = "Reta a un jugador a adivinar la palabra compartiéndole el siguiente link:<br>" + location.href + "2?idPartida=" + data.idpartida;
-            idgame = data.idpartida;
-            document.getElementById('consultaEstado').innerHTML = '<p>Si deseas que se se avise cuando el otro jugador termina el juego, confirma apretando el siguiente botón</p><button onclick="pedirEstado()">Confirmar</button>';
         });
     }else{
         alert("El campo palabra está vacío");
@@ -71,3 +68,5 @@ function probarLetra() {
     }
     
 }
+
+
