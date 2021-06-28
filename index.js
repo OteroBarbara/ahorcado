@@ -39,6 +39,15 @@ app.get('/ahorcado2/newgame', (req, res) => {
     }
 })
 
+app.get('/ahorcado2/expectador', (req, res) => {
+    let id = req.query.idPartida;
+    if (id != undefined){
+        res.sendFile(path.resolve(__dirname, 'frontend/player1.html'))
+    }else{
+        res.send('error 404 not found');
+    }
+})
+
 //juego
 app.post('/ahorcado/newgame', (req, res) => {
     // instrucciones cuando envía una palabra
@@ -100,7 +109,7 @@ app.post('/ahorcado2/newgame', (req, res) => {
 })
 
 //consulta de estado
-/* app.get('/ahorcado/consultaEstado', (req, res) => {
+app.get('/ahorcado/consultaEstado', (req, res) => {
     let partidas = JSON.parse(fs.readFileSync("game.json"));
     let partidaEnCurso = partidas.find(game => game.idPartida == req.query.idPartida);
     if (partidaEnCurso.adivino == true){
@@ -108,9 +117,9 @@ app.post('/ahorcado2/newgame', (req, res) => {
     }else if (partidaEnCurso.intentos == 0){
         res.json({estado: false});
     }else{
-        res.send(undefined);
+        res.json({estado: "sin terminar"});
     }
-}) */
+})
 
 
 //escuchando al puerto

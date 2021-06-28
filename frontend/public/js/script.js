@@ -14,6 +14,7 @@ function cargarPalabra(){
         .then(data => {
             console.log(data.idpartida);
             document.getElementById('compartir-link').innerHTML = "Reta a un jugador a adivinar la palabra compartiéndole el siguiente link:<br>" + location.href + "2?idPartida=" + data.idpartida;
+            document.getElementById('expectar').innerHTML ='<p>Clickea el siguiente botón para expectar la partida de quién desafiaste:</p><a target="_blank" href="/ahorcado2/expectador?idPartida='+data.idpartida+'" onclick="consultarEstado('+data.idpartida+')">Expectar partida</A>'
         });
     }else{
         alert("El campo palabra está vacío");
@@ -64,5 +65,31 @@ function probarLetra() {
         alert('Debe ingresar una letra');
     }
     
+}
+
+//expectar partida:
+function expectarPartida(){
+    document.getElementById('compartir-link-ep').innerHTML = "http://localhost:3001/ahorcado2" + location.search;
+    consultarEstado();
+}
+
+function consultarEstado(){
+    fetch(`/ahorcado/consultaEstado${location.search}`)
+    .then(res => res.json())
+    .then (data => {
+        console.log("esperando");
+        if(data != undefined){
+            cargarPlayer2();
+            if (data.estado == true){
+                alert("El otro jugador ha adivinado la palabra y ganado el juego.")
+            }else if (data.estado == false){
+                alert("El otro jugador ha agotado sus intentos y perdido el juego.")
+            }
+            else if (data.estado == "sin terminar"){
+                console.log(data.estado)
+            }
+        }
+    })
+    .then (setTimeout(consultarEstado,1500))
 }
 
