@@ -1,5 +1,3 @@
-let historial = "";
-
 function cargarPalabra(){
     let palabra = document.getElementById('palabra').value.toUpperCase(); 
 
@@ -26,21 +24,19 @@ function cargarPlayer2() {
     fetch(`/ahorcado2/newgame${location.search}`)
     .then(res => res.json())
     .then(data => {
-        iniciarJuego(data.palabraOculta, data.intentos);
+        iniciarJuego(data.palabraOculta, data.intentos, data.historial);
     });
 }
 
-function iniciarJuego(palabra, intentos) {
+function iniciarJuego(palabra, intentos, historial) {
     document.getElementById('palabraOculta').innerHTML = palabra;
     document.getElementById('intentos').innerHTML = intentos;
+    document.getElementById('historial').innerHTML = historial;
 }
 
 function probarLetra() {
     let letra = document.getElementById("letra").value.toUpperCase();
     if ((letra.length == 1)&&(letra >= 'A')&&(letra <= 'Z')){
-        console.log(letra);
-        historial += letra + ' ';
-        document.getElementById('historial').innerHTML = historial;
         fetch(`/ahorcado2/newgame${location.search}`, {
             method: 'POST',
             headers: {
@@ -51,6 +47,7 @@ function probarLetra() {
         .then(res =>  res.json())
         .then(data => {
             if (data != undefined){
+                document.getElementById('historial').innerHTML = data.historial;
                 document.getElementById('palabraOculta').innerHTML = data.palabraOculta;
                 document.getElementById('intentos').innerHTML = data.intentos;
                 if (data.adivino === true){
@@ -68,5 +65,4 @@ function probarLetra() {
     }
     
 }
-
 

@@ -53,7 +53,8 @@ app.post('/ahorcado/newgame', (req, res) => {
         intentos: 5,
         palabra: word,
         palabraOculta: secretword,
-        adivino: false
+        adivino: false,
+        historial: ""
     }
     let data = JSON.parse(fs.readFileSync('game.json'));
     data.push(infoPartida);
@@ -68,24 +69,27 @@ app.post('/ahorcado2/newgame', (req, res) => {
         let partidas = JSON.parse(fs.readFileSync("game.json"));
         let partidaEnCurso = partidas.find(game => game.idPartida == id);
         if(partidaEnCurso.intentos > 0){
+            if (!(partidaEnCurso.historial.includes(letra))){
                 let word = partidaEnCurso.palabra;
-            if (word.includes(letra)){
-                let palabra = word.split('');
-                let palabraOculta = partidaEnCurso.palabraOculta.split('');
-                for (let i=0; i<palabra.length; i++){
-                    if(palabra[i]==letra){
-                        palabraOculta[i] = letra;
+                partidaEnCurso.historial += letra + ' ';
+                if (word.includes(letra)){
+                    let palabra = word.split('');
+                    let palabraOculta = partidaEnCurso.palabraOculta.split('');
+                    for (let i=0; i<palabra.length; i++){
+                        if(palabra[i]==letra){
+                            palabraOculta[i] = letra;
+                        }
                     }
+                    let secretword = palabraOculta.join('');
+                    partidaEnCurso.palabraOculta = secretword;
+                    if (word == secretword){
+                        partidaEnCurso.adivino = true;
+                    }
+                }else{
+                    partidaEnCurso.intentos --;
                 }
-                let secretword = palabraOculta.join('');
-                partidaEnCurso.palabraOculta = secretword;
-                if (word == secretword){
-                    partidaEnCurso.adivino = true;
-                }
-            }else{
-                partidaEnCurso.intentos --;
+                fs.writeFile('game.json', JSON.stringify(partidas), (err) => {console.log(err)});
             }
-            fs.writeFile('game.json', JSON.stringify(partidas), (err) => {console.log(err)});
             res.json(partidaEnCurso);
         }else{
             res.send(undefined);
@@ -96,7 +100,7 @@ app.post('/ahorcado2/newgame', (req, res) => {
 })
 
 //consulta de estado
-app.get('/ahorcado/consultaEstado', (req, res) => {
+/* app.get('/ahorcado/consultaEstado', (req, res) => {
     let partidas = JSON.parse(fs.readFileSync("game.json"));
     let partidaEnCurso = partidas.find(game => game.idPartida == req.query.idPartida);
     if (partidaEnCurso.adivino == true){
@@ -106,7 +110,7 @@ app.get('/ahorcado/consultaEstado', (req, res) => {
     }else{
         res.send(undefined);
     }
-})
+}) */
 
 
 //escuchando al puerto
