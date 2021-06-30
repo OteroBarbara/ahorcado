@@ -81,9 +81,11 @@ function consultarEstado(){
         if(data != undefined){
             cargarPlayer2();
             if (data.estado == true){
-                alert("El otro jugador ha adivinado la palabra y ganado el juego.")
+                alert("El otro jugador ha adivinado la palabra y ganado el juego.");
+                throw new Error
             }else if (data.estado == false){
-                alert("El otro jugador ha agotado sus intentos y perdido el juego.")
+                alert("El otro jugador ha agotado sus intentos y perdido el juego.");
+                throw new Error
             }
             else if (data.estado == "sin terminar"){
                 console.log(data.estado)
@@ -91,5 +93,6 @@ function consultarEstado(){
         }
     })
     .then (setTimeout(consultarEstado,1500))
+    .catch(err => console.log("juego terminado"));
 }
 
