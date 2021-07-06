@@ -1,8 +1,6 @@
 function cargarPalabra(){
     let palabra = document.getElementById('palabra').value.toUpperCase(); 
-
-    if (palabra != "") {
-        console.log(palabra);
+    if ((palabra != "") && (!/(\d|\W)/gm.test(palabra))) {
         fetch("/ahorcado/newgame", {
             method: 'POST',
             headers: {
@@ -12,12 +10,11 @@ function cargarPalabra(){
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data.idpartida);
             document.getElementById('compartir-link').innerHTML = "Reta a un jugador a adivinar la palabra compartiéndole el siguiente link:<br>" + location.href + "2?idPartida=" + data.idpartida;
             document.getElementById('expectar').innerHTML ='<p>Clickea el siguiente botón para expectar la partida de quién desafiaste:</p><a target="_blank" href="/ahorcado2/expectador?idPartida='+data.idpartida+'" onclick="consultarEstado('+data.idpartida+')">Expectar partida</A>'
         });
     }else{
-        alert("El campo palabra está vacío");
+        alert("Debe ingresar una palabra, sin números ni espacios");
     }
 }
 

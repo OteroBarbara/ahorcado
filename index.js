@@ -52,29 +52,33 @@ app.get('/ahorcado2/expectador', (req, res) => {
 app.post('/ahorcado/newgame', (req, res) => {
     // instrucciones cuando envía una palabra
     let word = req.body.pal;
-    let secretword = "";
-    for (let i = 0 ; i < word.length ; i++){
-        secretword += "_";
-    };
-    let codigo = shortID.generate();
-    let infoPartida = {
-        idPartida: codigo,
-        intentos: 5,
-        palabra: word,
-        palabraOculta: secretword,
-        adivino: false,
-        historial: ""
+    if ((word != "") && (!/(\d|\W)/gm.test(word))){
+        let secretword = "";
+        for (let i = 0 ; i < word.length ; i++){
+            secretword += "_";
+        };
+        let codigo = shortID.generate();
+        let infoPartida = {
+            idPartida: codigo,
+            intentos: 5,
+            palabra: word,
+            palabraOculta: secretword,
+            adivino: false,
+            historial: ""
+        }
+        let data = JSON.parse(fs.readFileSync('game.json'));
+        data.push(infoPartida);
+        fs.writeFile('game.json', JSON.stringify(data), (err) => {console.log(err)});
+        return res.json({palabra: word.pal , idpartida: codigo});
+    }else{
+        res.send(undefined);
     }
-    let data = JSON.parse(fs.readFileSync('game.json'));
-    data.push(infoPartida);
-    fs.writeFile('game.json', JSON.stringify(data), (err) => {console.log(err)});
-    return res.json({palabra: word.pal , idpartida: codigo});
 })
 
 app.post('/ahorcado2/newgame', (req, res) => {
     let id = req.query.idPartida;
-    let letra = req.body.letter;
-    if (id != undefined){
+    let letra = req.body.letter.toUpperCase();
+    if ((id != undefined)&&(letra.length == 1)&&(letra >= 'A')&&(letra <= 'Z')){
         let partidas = JSON.parse(fs.readFileSync("game.json"));
         let partidaEnCurso = partidas.find(game => game.idPartida == id);
         if(partidaEnCurso.intentos > 0){
