@@ -1,6 +1,12 @@
+var imagenes = []
+for (let i = 0; i<6; i++){
+    imagenes[i]=`<img src='img/ahorcado${i}.png' alt='Imagen ahorcado con ${i} intentos restantes'>`
+}
+
 function cargarPalabra(){
     let palabra = document.getElementById('palabra').value.toUpperCase(); 
-    if ((palabra != "") && (!/(\d|\W)/gm.test(palabra))) {
+
+    if ((palabra != "")  && (!/(\d|\W)/gm.test(palabra))) {
         fetch("/ahorcado/newgame", {
             method: 'POST',
             headers: {
@@ -30,6 +36,7 @@ function iniciarJuego(palabra, intentos, historial) {
     document.getElementById('palabraOculta').innerHTML = palabra;
     document.getElementById('intentos').innerHTML = intentos;
     document.getElementById('historial').innerHTML = historial;
+    document.getElementById('imagenAhorcado').innerHTML = imagenes[intentos];
 }
 
 function probarLetra() {
@@ -45,9 +52,7 @@ function probarLetra() {
         .then(res =>  res.json())
         .then(data => {
             if (data != undefined){
-                document.getElementById('historial').innerHTML = data.historial;
-                document.getElementById('palabraOculta').innerHTML = data.palabraOculta;
-                document.getElementById('intentos').innerHTML = data.intentos;
+                iniciarJuego(data.palabraOculta, data.intentos, data.historial); //Actualizo lo que se ve en pantalla
                 if (data.adivino === true){
                     alert("Ganaste el juego");
                 }else if (data.intentos === 0){

@@ -51,7 +51,7 @@ app.get('/ahorcado2/expectador', (req, res) => {
 //juego
 app.post('/ahorcado/newgame', (req, res) => {
     // instrucciones cuando envía una palabra
-    let word = req.body.pal;
+    let word = req.body.pal.toUpperCase();
     if ((word != "") && (!/(\d|\W)/gm.test(word))){
         let secretword = "";
         for (let i = 0 ; i < word.length ; i++){
